@@ -23,47 +23,61 @@ let currentPlayerHealth = chosenMaxLife;
 adjustHealthBars(chosenMaxLife);
 
 function writeToLog(event, value, monsterHealth, playerHealth) {
-  let logentry;
-  if (event == LOG_EVENT_PLAYER_ATTACK) {
-    logentry = {
-      event: event,
-      value: value,
-      target: "Monster",
-      finalMonsterHealth: monsterHealth,
-      finalPlayerHealth: playerHealth,
-    };
-  } else if (event == LOG_EVENT_PLAYER_STRONG_ATTACK) {
-    logentry = {
-      event: event,
-      value: value,
-      target: "Monster",
-      finalMonsterHealth: monsterHealth,
-      finalPlayerHealth: playerHealth,
-    };
-  } else if (event == LOG_EVENT_MONSTER_ATTACK) {
-    logentry = {
-      event: event,
-      value: value,
-      target: "Player",
-      finalMonsterHealth: monsterHealth,
-      finalPlayerHealth: playerHealth,
-    };
-  } else if ((event = LOG_EVENT_PLAYER_HEAL)) {
-    logentry = {
-      event: event,
-      value: value,
-      target: "Monster",
-      finalMonsterHealth: monsterHealth,
-      finalPlayerHealth: playerHealth,
-    };
-  } else if ((event = LOG_EVENT_GAME_OVER)) {
-    logentry = {
-      event: event,
-      value: value,
-      finalMonsterHealth: monsterHealth,
-      finalPlayerHealth: playerHealth,
-    };
+  let logentry = {
+    event: event,
+    value: value,
+    target: "Monster",
+    finalMonsterHealth: monsterHealth,
+    finalPlayerHealth: playerHealth,
+  };
+  switch (event) {
+    case LOG_EVENT_PLAYER_ATTACK:
+      logentry.target = "MONSTER";
+      break;
+    case LOG_EVENT_PLAYER_STRONG_ATTACK:
+      logentry = {
+        event: event,
+        value: value,
+        target: "Monster",
+        finalMonsterHealth: monsterHealth,
+        finalPlayerHealth: playerHealth,
+      };
+      break;
+    case LOG_EVENT_MONSTER_ATTACK:
+      logentry = {
+        event: event,
+        value: value,
+        target: "Player",
+        finalMonsterHealth: monsterHealth,
+        finalPlayerHealth: playerHealth,
+      };
+      break;
+    case LOG_EVENT_PLAYER_HEAL:
+      logentry = {
+        event: event,
+        value: value,
+        target: "Monster",
+        finalMonsterHealth: monsterHealth,
+        finalPlayerHealth: playerHealth,
+      };
+      break;
+    case LOG_EVENT_GAME_OVER:
+      logentry = {
+        event: event,
+        value: value,
+        finalMonsterHealth: monsterHealth,
+        finalPlayerHealth: playerHealth,
+      };
+      break;
+    default:
+      logentry = {};
   }
+  // if (event == LOG_EVENT_PLAYER_ATTACK) {
+  // } else if (event == LOG_EVENT_PLAYER_STRONG_ATTACK) {
+  // } else if (event == LOG_EVENT_MONSTER_ATTACK) {
+  // } else if ((event = LOG_EVENT_PLAYER_HEAL)) {
+  // } else if ((event = LOG_EVENT_GAME_OVER)) {
+  // }
   battleLog.push(logentry);
 }
 
@@ -185,7 +199,12 @@ function healPlayerHandler() {
 }
 
 function printlogEntry() {
-  console.log(battleLog);
+  // for(let i = 0 ; i < battleLog.length ; i++) {
+  //   console.log(battleLog[i]);
+  // }
+  for (const el of battleLog) {
+    console.log(el)
+  }
 }
 
 attackBtn.addEventListener("click", attackHandler);
