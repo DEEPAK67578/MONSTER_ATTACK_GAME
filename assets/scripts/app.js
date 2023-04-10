@@ -8,15 +8,28 @@ const LOG_EVENT_MONSTER_ATTACK = "MONSTER_ATTACK";
 const LOG_EVENT_PLAYER_HEAL = "PLAYER_HEAL";
 const LOG_EVENT_GAME_OVER = "GAME_OVER";
 
-const enteredValue = prompt("Max life for you and the Monster", "100");
+function input() {
+  const enteredValue = prompt("Max life for you and the Monster", "100");
+  const parsedValue = parseInt(enteredValue);
 
-let chosenMaxLife = parseInt(enteredValue);
+  if (isNaN(parsedValue) || parsedValue <= 0) {
+    throw { message: "Input is not valid" };
+  }
+  return parsedValue;
+}
+let chosenMaxLife;
 
-if (isNaN(chosenMaxLife) || chosenMaxLife <= 0) {
+try {
+  chosenMaxLife = input();
+} catch (err) {
+  console.log(err);
   chosenMaxLife = 100;
+  // alert("You entered something wrong,default value of 100 is set");
+  alert(err.message)
 }
 
 let battleLog = [];
+let lastLoggedEntry;
 let hasBonusLife = true;
 let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
@@ -202,8 +215,17 @@ function printlogEntry() {
   // for(let i = 0 ; i < battleLog.length ; i++) {
   //   console.log(battleLog[i]);
   // }
+  let i = 0;
   for (const el of battleLog) {
-    console.log(el)
+    if ((!lastLoggedEntry && lastLoggedEntry !== 0) || lastLoggedEntry < i) {
+      console.log(`#${i}`);
+      for (const logkey in el) {
+        console.log(logkey + ":" + el[logkey]);
+      }
+      lastLoggedEntry = i;
+      break;
+    }
+    i++;
   }
 }
 
